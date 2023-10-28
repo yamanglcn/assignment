@@ -30,7 +30,21 @@ public class NLP {
     public static String textLemmatization(String _content) {
         StringBuilder sbContent = new StringBuilder();
         //TODO Task 2.2 - 3 marks
+        String[] content = _content.split(" ");
+        for(String word : content) {
+            if(word.endsWith("ing")){
+                sbContent.append(word, 0, word.length()-3).append(" ");
+            } else if(word.endsWith("ed")){
+                sbContent.append(word, 0, word.length()-2).append(" ");
+            } else if(word.endsWith("es")){
+                sbContent.append(word, 0, word.length()-2).append(" ");
+            } else if(word.endsWith("s")){
+                sbContent.append(word, 0, word.length()-1).append(" ");
+            } else {
+                sbContent.append(word).append(" ");
+            }
 
+        }
 
         return sbContent.toString().trim();
     }
@@ -44,8 +58,16 @@ public class NLP {
     public static String removeStopWords(String _content, String[] _stopWords) {
         StringBuilder sbConent = new StringBuilder();
         //TODO Task 2.3 - 3 marks
+        String[] content = _content.split(" ");
 
+        for(String word : content){
+            for(String stopWord : _stopWords){
+                if(!word.equals(stopWord)){
+                    sbConent.append(word).append(" ");
+                }
 
+            }
+        }
         return sbConent.toString().trim();
     }
 
