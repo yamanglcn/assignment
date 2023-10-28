@@ -44,25 +44,46 @@ public class Vector {
         if(_size == doubElements.length || _size <= 0){
             return this;
         } else if(_size < doubElements.length) {
+            double[] resizedVector = new double[_size];
+
             for(int i = 0; i < _size; i++) {
-                double[] resizedVector = new double[_size];
                 resizedVector[i] = doubElements[i];
-                return new Vector(resizedVector);
             }
+            return new Vector(resizedVector);
         } else if(_size > doubElements.length) {
-            for(int i = doubElements.length; i < _size; i--) {
-                double[] resizedVector = new double[doubElements.length];
+            double[] resizedVector = new double[_size];
+
+            for(int i = 0; i < doubElements.length; i++) {
                 resizedVector[i] = doubElements[i];
-                return new Vector(resizedVector);
             }
+            for(int i = doubElements.length; i < _size; i++) {
+                resizedVector[i] = -1;
+            }
+
+            return new Vector(resizedVector);
         }
         return null; //you need to modify the return value
     }
 
     public Vector add(Vector _v) {
         //TODO Task 3.7 - 2 marks
+        int vectorSize = 0;
+        if (_v.doubElements.length > doubElements.length) {
+            reSize(_v.doubElements.length);
+            vectorSize = getVectorSize();
+        } else if (_v.doubElements.length < doubElements.length){
+            _v.reSize(doubElements.length);
+            vectorSize = getVectorSize();
+        } else {
+            vectorSize = getVectorSize();
+        }
+        double[] finalArray = new double[vectorSize];
+        Vector finalVector = new Vector(finalArray);
 
-        return null; //you need to modify the return value
+        for(int i = 0; i < doubElements.length; i++) {
+            finalVector.doubElements[i] = _v.doubElements[i] + doubElements[i];
+        }
+        return finalVector; //you need to modify the return value
     }
 
     public Vector subtraction(Vector _v) {
