@@ -41,6 +41,7 @@ public class Vector {
 
     public Vector reSize(int _size) {
         //TODO Task 3.6 - 6 marks
+        int initSize = doubElements.length;
         if(_size == doubElements.length || _size <= 0){
             return this;
         } else if(_size < doubElements.length) {
@@ -67,29 +68,36 @@ public class Vector {
 
     public Vector add(Vector _v) {
         //TODO Task 3.7 - 2 marks
-        int vectorSize = 0;
-        if (_v.doubElements.length > doubElements.length) {
-            reSize(_v.doubElements.length);
-            vectorSize = getVectorSize();
-        } else if (_v.doubElements.length < doubElements.length){
-            _v.reSize(doubElements.length);
-            vectorSize = getVectorSize();
-        } else {
-            vectorSize = getVectorSize();
-        }
-        double[] finalArray = new double[vectorSize];
-        Vector finalVector = new Vector(finalArray);
+        int vectorSize = Math.max(doubElements.length, _v.doubElements.length);
+        _v = _v.reSize(vectorSize);
 
-        for(int i = 0; i < doubElements.length; i++) {
-            finalVector.doubElements[i] = _v.doubElements[i] + doubElements[i];
+        double[] tmpArray = new double[vectorSize];
+        Vector tmpVector;
+        tmpVector= this.reSize(vectorSize);
+
+        Vector finalVector = new Vector(tmpArray);
+
+        for(int i = 0; i < vectorSize; i++) {
+            finalVector.doubElements[i] = _v.doubElements[i] + tmpVector.doubElements[i];
         }
         return finalVector; //you need to modify the return value
     }
 
     public Vector subtraction(Vector _v) {
         //TODO Task 3.8 - 2 marks
+        int vectorSize = Math.max(doubElements.length, _v.doubElements.length);
+        _v = _v.reSize(vectorSize);
 
-        return null; //you need to modify the return value
+        double[] tmpArray = new double[vectorSize];
+        Vector tmpVector;
+        tmpVector= this.reSize(vectorSize);
+
+        Vector finalVector = new Vector(tmpArray);
+
+        for(int i = 0; i < vectorSize; i++) {
+            finalVector.doubElements[i] = tmpVector.doubElements[i] - _v.doubElements[i];
+        }
+        return finalVector; //you need to modify the return value
     }
 
     public double dotProduct(Vector _v) {
