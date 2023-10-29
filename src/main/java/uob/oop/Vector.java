@@ -102,15 +102,50 @@ public class Vector {
 
     public double dotProduct(Vector _v) {
         //TODO Task 3.9 - 2 marks
+        int vectorSize = Math.max(doubElements.length, _v.doubElements.length);
+        _v = _v.reSize(vectorSize);
 
-        return 0.0; //you need to modify the return value
+        double[] tmpArray = new double[vectorSize];
+        Vector tmpVector;
+        tmpVector= this.reSize(vectorSize);
+
+        Vector finalVector = new Vector(tmpArray);
+
+        for(int i = 0; i < vectorSize; i++) {
+            finalVector.doubElements[i] = tmpVector.doubElements[i] * _v.doubElements[i];
+        }
+        double finalProduct = 0;
+        for(int i = 0; i < vectorSize; i++){
+            finalProduct = finalProduct + finalVector.doubElements[i];
+        }
+
+        return finalProduct; //you need to modify the return value
     }
 
     public double cosineSimilarity(Vector _v) {
         //TODO Task 3.10 - 6.5 marks
+        int vectorSize = Math.max(doubElements.length, _v.doubElements.length);
+        _v = _v.reSize(vectorSize);
 
+        double[] tmpArray = new double[vectorSize];
+        Vector tmpVector;
+        tmpVector= this.reSize(vectorSize);
 
-        return 0.0; //you need to modify the return value
+        double dotProduct = this.dotProduct(_v);
+
+        double magnitudeOne = 0;
+        double magnitudeTwo = 0;
+
+        for(int i = 0; i < vectorSize; i++) {
+            magnitudeOne = magnitudeOne + (tmpVector.doubElements[i] * tmpVector.doubElements[i]);
+            magnitudeTwo = magnitudeTwo + (_v.doubElements[i] * _v.doubElements[i]);
+        }
+
+        magnitudeOne = Math.sqrt(magnitudeOne);
+        magnitudeTwo = Math.sqrt(magnitudeTwo);
+
+        double finalSimilarity = dotProduct / (magnitudeOne * magnitudeTwo);
+        return finalSimilarity; //you need to modify the return value
     }
 
     @Override
