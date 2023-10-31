@@ -69,12 +69,13 @@ public class NewsClassifier {
         double[][] myTF = new double[_cleanedContents.length][vocabularyList.length];
         double[][] myIDF = new double[_cleanedContents.length][vocabularyList.length];
         int[][] frequency = new int[_cleanedContents.length][vocabularyList.length];
+        int[] idfWordCount = new int[vocabularyList.length];
         //TODO 4.3 - 10 marks
-        //Calculate Term Frequency
+
+        //Calculate Frequency
         for (int i = 0; i < _cleanedContents.length; i++){
 
             String[] tmpArray = _cleanedContents[i].split(" ");
-            //double[] TF = new double[vocabularyList.length];
             int tmpCount = 0;
             for (int j = 0; j < vocabularyList.length; j++) {
 
@@ -89,6 +90,17 @@ public class NewsClassifier {
             }
         }
 
+        //Number of documents where the word z appears.
+        for (int i = 0; i < vocabularyList.length; i++) {
+            for (int j = 0; j < _cleanedContents.length; j++) {
+                if (frequency[j][i] != 0) {
+                    idfWordCount[i]++;
+                }
+            }
+        }
+
+
+        //TF Calculation
         for (int i = 0; i < _cleanedContents.length; i++) {
             String[] tmpArray = _cleanedContents[i].split(" ");
             for (int j = 0; j < vocabularyList.length; j++) {
@@ -96,8 +108,21 @@ public class NewsClassifier {
             }
         }
 
+        //IDF Calculation
+        for (int i = 0; i < _cleanedContents.length; i++) {
+            String[] tmpArray = _cleanedContents[i].split(" ");
+            for (int j = 0; j < vocabularyList.length; j++) {
+                myIDF[i][j] = Math.log((double) _cleanedContents.length /idfWordCount[j]) + 1;
+            }
+        }
 
-
+        //TFIDF Calculation
+        for (int i = 0; i < _cleanedContents.length; i++) {
+            String[] tmpArray = _cleanedContents[i].split(" ");
+            for (int j = 0; j < vocabularyList.length; j++) {
+                myTFIDF[i][j] = myTF[i][j] * myIDF[i][j];
+            }
+        }
 
         return myTFIDF;
     }
@@ -105,12 +130,11 @@ public class NewsClassifier {
     public String[] buildVocabulary(String[] _cleanedContents) {
         String[] arrayVocabulary = null;
         //TODO 4.4 - 10 marks
-        //Gathering all the words in to one array (lines 80-95)
         int length = 0;
 
         for (int i = 0; i < _cleanedContents.length; i++) {
-        String[] tmpArray = _cleanedContents[i].split(" ");
-        length = length + tmpArray.length;
+            String[] tmpArray = _cleanedContents[i].split(" ");
+            length = length + tmpArray.length;
         }
 
         String[] wordArray = new String[length];
@@ -123,31 +147,52 @@ public class NewsClassifier {
             tmpLength = tmpLength + tmpArray.length;
         }
 
-        for (int i = 0; i < length; i++) {
-            for (int j = i + 1; j < length; j++) {
-                if (wordArray[i] != null && wordArray[i].equals(wordArray[j])) {
+        boolean[] inList = new boolean[length];
 
-                    for (int k = j; k < length - 1; k++) {
-                        wordArray[k] = wordArray[k + 1];
+        for (int i = 0; i < length; i++) {
+            if (!inList[i]) {
+                for (int j = i + 1; j < length; j++) {
+                    if (wordArray[i].equals(wordArray[j])) {
+                        inList[j] = true;
                     }
-                    length--;
-                    j--;
                 }
             }
         }
 
-        arrayVocabulary = new String[length];
+        int finalLength = 0;
+        for (boolean count : inList) {
+            if (!count) {
+                finalLength++;
+            }
+        }
 
+        String[] tmpVocab = new String[length];
+        arrayVocabulary = new String[finalLength];
+
+        int finalIndex = 0;
         for (int i = 0; i < length; i++) {
-            arrayVocabulary[i] = wordArray[i];
+            if (!inList[i]) {
+                tmpVocab[finalIndex++] = wordArray[i];
+            }
+        }
+
+        for (int i = 0; i < finalLength; i++) {
+            arrayVocabulary[i] = tmpVocab[i];
         }
 
         return arrayVocabulary;
     }
 
     public double[][] newsSimilarity(int _newsIndex) {
-        double[][] mySimilarity = null;
+        int length = this.newsTFIDF.length;
+        double[][] mySimilarity = new double[length][length];
+        //Vector indexTFIDF = new Vector(this.newsTFIDF[_newsIndex]);
 
+        //CS Calculation
+        //for (int i = 0; i < length; i++) {
+        //Vector tmpVector = new Vector(this.newsTFIDF[i]);
+        //mySimilarity[i][0] = indexTFIDF.cosineSimilarity(tmpVector);
+        //}
         //TODO 4.5 - 15 marks
 
 
