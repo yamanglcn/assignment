@@ -41,22 +41,62 @@ public class NewsClassifier {
 
     public void loadData() {
         //TODO 4.1 - 2 marks
-
+        newsTitles = new String[myHTMLs.length];
+        newsContents = new String[myHTMLs.length];
+        for (int i = 0; i < myHTMLs.length; i++) {
+            newsTitles[i] = HtmlParser.getNewsTitle(myHTMLs[i]);
+            newsContents[i] = HtmlParser.getNewsContent(myHTMLs[i]);
+        }
     }
 
     public String[] preProcessing() {
         String[] myCleanedContent = null;
         //TODO 4.2 - 5 marks
+        myCleanedContent = new String[myHTMLs.length];
 
+        for (int i = 0; i < myHTMLs.length; i++) {
+            myCleanedContent[i] = NLP.textCleaning(newsContents[i]);
+            myCleanedContent[i] = NLP.textLemmatization(newsContents[i]);
+            myCleanedContent[i] = NLP.removeStopWords(newsContents[i], myStopWords);
+        }
 
         return myCleanedContent;
     }
 
     public double[][] calculateTFIDF(String[] _cleanedContents) {
         String[] vocabularyList = buildVocabulary(_cleanedContents);
-        double[][] myTFIDF = null;
-
+        double[][] myTFIDF = new double[_cleanedContents.length][vocabularyList.length];
+        double[][] myTF = new double[_cleanedContents.length][vocabularyList.length];
+        double[][] myIDF = new double[_cleanedContents.length][vocabularyList.length];
+        int[][] frequency = new int[_cleanedContents.length][vocabularyList.length];
         //TODO 4.3 - 10 marks
+        //Calculate Term Frequency
+        for (int i = 0; i < _cleanedContents.length; i++){
+
+            String[] tmpArray = _cleanedContents[i].split(" ");
+            //double[] TF = new double[vocabularyList.length];
+            int tmpCount = 0;
+            for (int j = 0; j < vocabularyList.length; j++) {
+
+                for (int k = 0; k < tmpArray.length; k++) {
+
+                    if (vocabularyList[j].equals(tmpArray[k])) {
+                        tmpCount++;
+                    }
+                }
+                frequency[i][j] = tmpCount;
+                tmpCount = 0;
+            }
+        }
+
+        for (int i = 0; i < _cleanedContents.length; i++) {
+            String[] tmpArray = _cleanedContents[i].split(" ");
+            for (int j = 0; j < vocabularyList.length; j++) {
+                myTF[i][j] = (double) frequency[i][j] / tmpArray.length;
+            }
+        }
+
+
 
 
         return myTFIDF;
@@ -64,9 +104,43 @@ public class NewsClassifier {
 
     public String[] buildVocabulary(String[] _cleanedContents) {
         String[] arrayVocabulary = null;
-
         //TODO 4.4 - 10 marks
+        //Gathering all the words in to one array (lines 80-95)
+        int length = 0;
 
+        for (int i = 0; i < _cleanedContents.length; i++) {
+        String[] tmpArray = _cleanedContents[i].split(" ");
+        length = length + tmpArray.length;
+        }
+
+        String[] wordArray = new String[length];
+        int tmpLength = 0;
+        for (int i = 0; i < _cleanedContents.length; i++) {
+            String[] tmpArray = _cleanedContents[i].split(" ");
+            for (int j = 0; j < tmpArray.length; j++) {
+                wordArray[tmpLength + j] = tmpArray[j];
+            }
+            tmpLength = tmpLength + tmpArray.length;
+        }
+
+        for (int i = 0; i < length; i++) {
+            for (int j = i + 1; j < length; j++) {
+                if (wordArray[i] != null && wordArray[i].equals(wordArray[j])) {
+
+                    for (int k = j; k < length - 1; k++) {
+                        wordArray[k] = wordArray[k + 1];
+                    }
+                    length--;
+                    j--;
+                }
+            }
+        }
+
+        arrayVocabulary = new String[length];
+
+        for (int i = 0; i < length; i++) {
+            arrayVocabulary[i] = wordArray[i];
+        }
 
         return arrayVocabulary;
     }

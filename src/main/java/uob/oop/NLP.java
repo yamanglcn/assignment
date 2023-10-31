@@ -13,7 +13,7 @@ public class NLP {
         char[] contentArray = _content.toCharArray();
 
         for(char letter : contentArray) {
-            if(Character.isLetterOrDigit(letter) || Character.isWhitespace(letter)) {
+            if((letter >= 'a' && letter <= 'z') || (letter >= '0' && letter <= '9') || (letter == ' ' || letter == '\t' || letter == '\n' || letter == '\r' || letter == '\f')) {
                 sbContent.append(letter);
             }
         }
