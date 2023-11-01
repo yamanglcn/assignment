@@ -36,13 +36,12 @@ public class HtmlParser {
         if (beginIndex != 1) {
             _htmlCode = _htmlCode.substring(beginIndex+12);
             String endContentSemantic = "\",";
-            int endIndex = _htmlCode.indexOf(endContentSemantic);
+            String quotes = _htmlCode.replace("\\\"", "  ");
+            int endIndex = quotes.indexOf(endContentSemantic);
             _htmlCode = _htmlCode.substring(3, endIndex-1);
             return _htmlCode.toLowerCase();
         } else {
             return "Content not found!";
     }
     }
-
-
 }

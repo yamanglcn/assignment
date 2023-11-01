@@ -137,8 +137,8 @@ public class Vector {
         double magnitudeTwo = 0;
 
         for(int i = 0; i < vectorSize; i++) {
-                magnitudeOne = magnitudeOne + (tmpVector.doubElements[i] * tmpVector.doubElements[i]);
-                magnitudeTwo = magnitudeTwo + (_v.doubElements[i] * _v.doubElements[i]);
+            magnitudeOne = magnitudeOne + (tmpVector.doubElements[i] * tmpVector.doubElements[i]);
+            magnitudeTwo = magnitudeTwo + (_v.doubElements[i] * _v.doubElements[i]);
         }
 
         magnitudeOne = Math.sqrt(magnitudeOne);

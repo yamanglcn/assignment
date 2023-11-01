@@ -41,30 +41,30 @@ public class NewsClassifier {
 
     public void loadData() {
         //TODO 4.1 - 2 marks
-        newsTitles = new String[myHTMLs.length];
-        newsContents = new String[myHTMLs.length];
+        this.newsTitles = new String[myHTMLs.length];
+        this.newsContents = new String[myHTMLs.length];
         for (int i = 0; i < myHTMLs.length; i++) {
-            newsTitles[i] = HtmlParser.getNewsTitle(myHTMLs[i]);
-            newsContents[i] = HtmlParser.getNewsContent(myHTMLs[i]);
+            this.newsTitles[i] = HtmlParser.getNewsTitle(this.myHTMLs[i]);
+            this.newsContents[i] = HtmlParser.getNewsContent(this.myHTMLs[i]);
         }
     }
 
     public String[] preProcessing() {
         String[] myCleanedContent = null;
         //TODO 4.2 - 5 marks
-        myCleanedContent = new String[myHTMLs.length];
+        myCleanedContent = new String[this.myHTMLs.length];
 
-        for (int i = 0; i < myHTMLs.length; i++) {
-            myCleanedContent[i] = NLP.textCleaning(newsContents[i]);
-            myCleanedContent[i] = NLP.textLemmatization(newsContents[i]);
-            myCleanedContent[i] = NLP.removeStopWords(newsContents[i], myStopWords);
+        for (int i = 0; i < myCleanedContent.length; i++) {
+            String cleanedContent = NLP.textCleaning(this.newsContents[i]);
+            String lemmanizedContent = NLP.textLemmatization(cleanedContent);
+            myCleanedContent[i] = NLP.removeStopWords(lemmanizedContent, this.myStopWords);
         }
 
         return myCleanedContent;
     }
 
     public double[][] calculateTFIDF(String[] _cleanedContents) {
-        String[] vocabularyList = buildVocabulary(_cleanedContents);
+        String[] vocabularyList = this.buildVocabulary(_cleanedContents);
         double[][] myTFIDF = new double[_cleanedContents.length][vocabularyList.length];
         double[][] myTF = new double[_cleanedContents.length][vocabularyList.length];
         double[][] myIDF = new double[_cleanedContents.length][vocabularyList.length];
