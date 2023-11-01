@@ -137,12 +137,16 @@ public class Vector {
         double magnitudeTwo = 0;
 
         for(int i = 0; i < vectorSize; i++) {
-            magnitudeOne = magnitudeOne + (tmpVector.doubElements[i] * tmpVector.doubElements[i]);
-            magnitudeTwo = magnitudeTwo + (_v.doubElements[i] * _v.doubElements[i]);
+                magnitudeOne = magnitudeOne + (tmpVector.doubElements[i] * tmpVector.doubElements[i]);
+                magnitudeTwo = magnitudeTwo + (_v.doubElements[i] * _v.doubElements[i]);
         }
 
         magnitudeOne = Math.sqrt(magnitudeOne);
         magnitudeTwo = Math.sqrt(magnitudeTwo);
+
+        if (magnitudeOne == 0 || magnitudeTwo == 0) {
+            return 0;
+        }
 
         double finalSimilarity = dotProduct / (magnitudeOne * magnitudeTwo);
         return finalSimilarity; //you need to modify the return value

@@ -185,14 +185,25 @@ public class NewsClassifier {
 
     public double[][] newsSimilarity(int _newsIndex) {
         int length = this.newsTFIDF.length;
-        double[][] mySimilarity = new double[length][length];
-        //Vector indexTFIDF = new Vector(this.newsTFIDF[_newsIndex]);
+        double[][] mySimilarity = new double[length][2];
+        Vector indexTFIDF = new Vector(this.newsTFIDF[_newsIndex]);
 
         //CS Calculation
-        //for (int i = 0; i < length; i++) {
-        //Vector tmpVector = new Vector(this.newsTFIDF[i]);
-        //mySimilarity[i][0] = indexTFIDF.cosineSimilarity(tmpVector);
-        //}
+        for (int i = 0; i < length; i++) {
+        Vector tmpVector = new Vector(this.newsTFIDF[i]);
+        mySimilarity[i][0] = i;
+        mySimilarity[i][1] = indexTFIDF.cosineSimilarity(tmpVector);
+        }
+
+        for (int i = 0; i < mySimilarity.length-1; i++) {
+            for (int j = 0; j < mySimilarity.length-i-1; j++) {
+                if (mySimilarity[j][1] < mySimilarity[j+1][1]) {
+                    double[] tmpValue = mySimilarity[j];
+                    mySimilarity[j] = mySimilarity[j+1];
+                    mySimilarity[j+1] = tmpValue;
+                }
+            }
+        }
         //TODO 4.5 - 15 marks
 
 

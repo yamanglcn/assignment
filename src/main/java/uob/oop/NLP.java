@@ -56,19 +56,25 @@ public class NLP {
      * @return Modified text.
      */
     public static String removeStopWords(String _content, String[] _stopWords) {
-        StringBuilder sbConent = new StringBuilder();
+        StringBuilder sbContent = new StringBuilder();
         //TODO Task 2.3 - 3 marks
         String[] content = _content.split(" ");
 
         for(String word : content){
+            boolean isStop = false;
             for(String stopWord : _stopWords){
-                if(!word.equals(stopWord)){
-                    sbConent.append(word).append(" ");
+                if(word.equals(stopWord)){
+                    isStop = true;
+                    break;
                 }
 
             }
+
+            if (!isStop) {
+                sbContent.append(word).append(" ");
+            }
         }
-        return sbConent.toString().trim();
+        return sbContent.toString().trim();
     }
 
 }
