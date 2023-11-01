@@ -210,11 +210,60 @@ public class NewsClassifier {
         return mySimilarity;
     }
 
+    static int[] trimArray(int _finalSize, int[] array) {
+        int[] trimmedArray = new int[_finalSize];
+        System.arraycopy(array, 0, trimmedArray, 0, _finalSize);
+        return trimmedArray;
+    }
+
     public String groupingResults(String _firstTitle, String _secondTitle) {
-        int[] arrayGroup1 = null, arrayGroup2 = null;
+        int[] arrayGroup1 = new int[this.newsTitles.length], arrayGroup2 = new int[this.newsTitles.length];
 
         //TODO 4.6 - 15 marks
 
+        int firstIndex = -1, secondIndex = -1;
+        for (int i = 0; i < this.newsTitles.length; i++) {
+            if (this.newsTitles[i].equals(_firstTitle)) {
+                firstIndex = i;
+            } else if (this.newsTitles[i].equals(_secondTitle)) {
+                secondIndex = i;
+            }
+        }
+
+        double[][] firstSimilarity = this.newsSimilarity(firstIndex);
+        double[][] secondSimilarity = this.newsSimilarity(secondIndex);
+
+        int firstCount = 0;
+        int secondCount = 0;
+        for (int i = 0; i < this.newsTitles.length; i++) {
+            double[] firstRow = new double[0];
+            double[] secondRow = new double[0];
+            boolean isFirst = false;
+            boolean isSecond = false;
+            for (int j = 0; j < firstSimilarity.length; j++) {
+                if (firstSimilarity[j][0] == i) {
+                    firstRow = firstSimilarity[j];
+                    isFirst = true;
+                } else if (secondSimilarity[j][0] == i) {
+                    secondRow = secondSimilarity[j];
+                    isSecond = true;
+                }
+                if (isFirst && isSecond) {
+                    break;
+                }
+            }
+
+            if (firstRow[1] >= secondRow[1]) {
+                arrayGroup1[firstCount] = (int) firstRow[0];
+                firstCount++;
+            } else {
+                arrayGroup2[secondCount] = (int) secondRow[0];
+                secondCount++;
+            }
+        }
+
+        arrayGroup1 = trimArray(firstCount, arrayGroup1);
+        arrayGroup2 = trimArray(secondCount, arrayGroup2);
 
         return resultString(arrayGroup1, arrayGroup2);
     }
