@@ -65,12 +65,14 @@ public class NewsClassifier {
 
     public double[][] calculateTFIDF(String[] _cleanedContents) {
         String[] vocabularyList = this.buildVocabulary(_cleanedContents);
-        double[][] myTFIDF = new double[_cleanedContents.length][vocabularyList.length];
+        double[][] myTFIDF = null;
+        //TODO 4.3 - 10 marks
+        myTFIDF = new double[_cleanedContents.length][vocabularyList.length];
         double[][] myTF = new double[_cleanedContents.length][vocabularyList.length];
         double[][] myIDF = new double[_cleanedContents.length][vocabularyList.length];
         int[][] frequency = new int[_cleanedContents.length][vocabularyList.length];
         int[] idfWordCount = new int[vocabularyList.length];
-        //TODO 4.3 - 10 marks
+
 
         //Calculate Frequency
         for (int i = 0; i < _cleanedContents.length; i++){
@@ -184,8 +186,10 @@ public class NewsClassifier {
     }
 
     public double[][] newsSimilarity(int _newsIndex) {
+        double[][] mySimilarity = null;
+        //TODO 4.5 - 15 marks
         int length = this.newsTFIDF.length;
-        double[][] mySimilarity = new double[length][2];
+        mySimilarity = new double[length][2];
         Vector indexTFIDF = new Vector(this.newsTFIDF[_newsIndex]);
 
         //CS Calculation
@@ -204,9 +208,6 @@ public class NewsClassifier {
                 }
             }
         }
-        //TODO 4.5 - 15 marks
-
-
         return mySimilarity;
     }
 
@@ -217,9 +218,11 @@ public class NewsClassifier {
     }
 
     public String groupingResults(String _firstTitle, String _secondTitle) {
-        int[] arrayGroup1 = new int[this.newsTitles.length], arrayGroup2 = new int[this.newsTitles.length];
+        int[] arrayGroup1 = null, arrayGroup2 = null;
 
         //TODO 4.6 - 15 marks
+        arrayGroup1 = new int[this.newsTitles.length];
+        arrayGroup2 = new int[this.newsTitles.length];
 
         int firstIndex = -1, secondIndex = -1;
         for (int i = 0; i < this.newsTitles.length; i++) {
